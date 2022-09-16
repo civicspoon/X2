@@ -17,6 +17,15 @@
             return $result;
             }
         
-    }
+        public function login($uid,$pass){
+            $result = mysqli_query($this->conn,"Select * from user where ID = '$uid' AND Password = md5('$pass')");
+            return $result;
+        
+        }
 
+        public function who_is($whoid){
+            $result =  mysqli_query($this->conn,"Select * from user where ID = '$whoid'");
+            return $result;
+        }
+    }
 ?>

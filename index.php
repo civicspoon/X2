@@ -1,3 +1,9 @@
+<?php
+header('Clear-Site-Data: "cache", "cookies", "storage", "executionContexts"');
+
+session_start();
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -41,28 +47,25 @@
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
                                     </div>
-                                    <form class="user">
+                                    <form class="user" autocomplete="off" method="post">
                                         <div class="form-group">
                                             <input type="text" name="uid" class="form-control form-control-user"
                                                 id="uid" aria-describedby="emailHelp"
-                                                placeholder="รหัสพนักงาน">
+                                                placeholder="รหัสพนักงาน" autocomplete="off" value="">
                                         </div>
                                         <div class="form-group">
                                             <input type="password" name="password" class="form-control form-control-user"
-                                                id="exampleInputPassword" placeholder="รหัสผ่าน">
+                                                id="exampleInputPassword" placeholder="รหัสผ่าน" autocomplete="off" value="">
                                         </div>
-                                        <div class="form-group">
-                                            <div class="custom-control custom-checkbox small">
-                                                <input type="checkbox" class="custom-control-input" id="customCheck">
-                                                <label class="custom-control-label" for="customCheck">Remember
-                                                    Me</label>
-                                            </div>
-                                        </div>
-                                        <a href="index.html" class="btn btn-primary btn-user btn-block">
+                                       
+                                        <button type="submit" name="login" class="btn btn-primary btn-user btn-block">
                                             Login
-                                        </a>
+                                        </button>
                                         <p><center><h2>
-                                            <?php 
+                                            <?php
+
+use LDAP\Result;
+
                                                 if(isset($_GET['msg'])){
                                                     echo $_GET['msg'];
                                                 }
@@ -70,7 +73,7 @@
                                             </h2>
                                             </center>
                                         </p>
-                                       
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -96,3 +99,29 @@
 </body>
 
 </html>
+
+<?php 
+    include_once('functions/functions.php');
+    $con = new DB_CON();
+    if(isset($_POST['uid'])){
+    $uid = $_POST['uid'];
+    $pass =$_POST['password'];
+
+    $result = $con->login($uid,$pass);
+    $row = mysqli_num_rows($result); 
+    $num = mysqli_fetch_array($result);
+    if($row!=0){
+        $_SESSION['UID'] = $num['ID'];
+        $_SESSION['Role']=$num['Role_ID'];
+        session_write_close();
+        echo "<script>alert('". $num['Name'] ."')</script>";
+       
+       header("location: XII.php?pid=1");
+      exit(0);
+    }
+
+    else {
+        echo "<script>alert('ชื่อ / รหัสผ่านไม่ถูกต้อง !')</script>";
+    }
+ }
+?>

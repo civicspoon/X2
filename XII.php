@@ -1,11 +1,17 @@
 <?php
-    session_start();
+    error_reporting(E_ERROR | E_WARNING | E_PARSE);
+ 
     include_once('functions/functions.php');
-
-    // if(!isset($_SESSION['uid'])){
-    //     header("location: index.php?msg=กรุณาลงชื่อเข้าใช้");
-    //     exit(0);
-    // }
+   session_start();
+   $uid =  $_SESSION['UID'];
+    $con = new DB_CON();
+   $whois = $con->who_is($uid);
+   $heis = mysqli_fetch_array($whois);
+   
+   if(!isset($_SESSION['UID'])){
+        header("location: index.php?msg=กรุณาลงชื่อเข้าใช้");
+        exit(0);
+    }
 ?>
 
 <!DOCTYPE html>
@@ -19,7 +25,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title> X-Ray Simulation|| X-II </title>
+    <title> X-Ray Simulation | X-II </title>
 
     <!-- Custom fonts for this template-->
     <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -60,73 +66,103 @@
 
             <!-- Divider -->
             <hr class="sidebar-divider">
-
+<!------------------------------ADMIIN MENU-------------------------------------------------------------------------->
             <!-- Heading -->
-            <div class="sidebar-heading">
-                Interface
+<?php
+        // 1 Super admin / 3 Site Admin / 4 qc
+    if($_SESSION['Role']==1 ||  $_SESSION['Role']==3 || $_SESSION['Role']==4){
+     echo ("        <div class='sidebar-heading'>
+                ADMIN
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Components</span>
+            <li class='nav-item'>
+                <a class='nav-link collapsed' href='#' data-toggle='collapse' data-target='#collapseTwo'
+                    aria-expanded='true' aria-controls='collapseTwo'>
+                    <i class='fas fa-fw fa-id-badge'></i>
+                    <span>รายชื่อพนักงาน</span>
                 </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Components:</h6>
-                        <a class="collapse-item" href="buttons.html">Buttons</a>
-                        <a class="collapse-item" href="cards.html">Cards</a>
+                <div id='collapseTwo' class='collapse' aria-labelledby='headingTwo' data-parent='#accordionSidebar'>
+                    <div class='bg-white py-2 collapse-inner rounded'>
+                        <h6 class='collapse-header'>บริหารจัดการ:</h6>
+                        <a class='collapse-item' href='buttons.html'>เพิ่ม/ค้นหา/แก้ใข</a>
+                        <a class='collapse-item' href='cards.html'>รายงาน</a>
+                    </div>
+                </div>
+            </li> 
+
+
+
+            <li class='nav-item'>
+                <a class='nav-link collapsed' href='#' data-toggle='collapse' data-target='#collapseUtilities'
+                    aria-expanded='true' aria-controls='collapseUtilities'>
+                    <i class='fas fa-fw  fa-desktop'></i>
+                    <span>การวินิฉัยภาพ</span>
+                </a>
+                <div id='collapseUtilities' class='collapse' aria-labelledby='headingUtilities'
+                    data-parent='#accordionSidebar'>
+                    <div class='bg-white py-2 collapse-inner rounded'>
+                        <h6 class='collapse-header'>Simulation:</h6>
+                        <a class='collapse-item' href='utilities-color.html'>ภาพรวม</a>
+                        <a class='collapse-item' href='utilities-border.html'>รายงานการใช้งาน</a>
                     </div>
                 </div>
             </li>
 
-            <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-wrench"></i>
-                    <span>Utilities</span>
-                </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Utilities:</h6>
-                        <a class="collapse-item" href="utilities-color.html">Colors</a>
-                        <a class="collapse-item" href="utilities-border.html">Borders</a>
-                        <a class="collapse-item" href="utilities-animation.html">Animations</a>
-                        <a class="collapse-item" href="utilities-other.html">Other</a>
-                    </div>
-                </div>
-            </li>
+            <hr class='sidebar-divider'>
 
-            <!-- Divider -->
-            <hr class="sidebar-divider">
+                  ");
 
+    }
+
+    if($_SESSION['Role']==1  || $_SESSION['Role']==4){
+         echo ("
+         <div class='sidebar-heading'>
+         Quality Control
+     </div>
+        <li class='nav-item'>
+        <a class='nav-link collapsed' href='#' data-toggle='collapse' data-target='#collapsQC'
+            aria-expanded='true' aria-controls='collapseUtilities'>
+            <i class='fas fa-fw  fa-check-square'></i>
+            <span>ฝ่ายควบคุมคุณภาพ</span>
+        </a>
+        <div id='collapsQC' class='collapse' aria-labelledby='headingUtilities'
+            data-parent='#accordionSidebar'>
+            <div class='bg-white py-2 collapse-inner rounded'>
+                <h6 class='collapse-header'>รีวิวภาพ:</h6>
+                <a class='collapse-item' href='utilities-color.html'>เพิ่มภาพ</a>
+                <a class='collapse-item' href='utilities-border.html'>ค้นหา/แก้ใข</a>
+                <a class='collapse-item' href='utilities-border.html'>เพิ่ม/ลบประเภท-ชนิด</a>
+            </div>
+        </div>
+    </li>
+
+    <hr class='sidebar-divider'> 
+    ");
+    }
+   
+?>  
+<!-----------------------------END ADMIIN MENU-------------------------------------------------------------------------->
             <!-- Heading -->
             <div class="sidebar-heading">
-                Addons
+                X-Ray Simulation
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item active">
                 <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true"
                     aria-controls="collapsePages">
-                    <i class="fas fa-fw fa-folder"></i>
-                    <span>Pages</span>
+                    <i class="fas fa-fw fa-check-square"></i>
+                    <span>การวินิฉัยภาพ</span>
                 </a>
                 <div id="collapsePages" class="collapse show" aria-labelledby="headingPages"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Login Screens:</h6>
-                        <a class="collapse-item" href="login.html">Login</a>
-                        <a class="collapse-item" href="register.html">Register</a>
-                        <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-                        <div class="collapse-divider"></div>
-                        <h6 class="collapse-header">Other Pages:</h6>
-                        <a class="collapse-item" href="404.html">404 Page</a>
-                        <a class="collapse-item active" href="blank.html">Blank Page</a>
+                        <h6 class="collapse-header">การเก็บชั่วโมง CBT</h6>
+                        <a class="collapse-item" href="login.html">เก็บชั่วโมง</a>
+                        <a class="collapse-item" href="register.html">รายงานการเก็บชั่วโมง</a>
+                        <a class="collapse-item" href="forgot-password.html">แกลเลอลี่ภาพ</a>
+                        
                     </div>
                 </div>
             </li>
@@ -134,15 +170,23 @@
             <!-- Nav Item - Charts -->
             <li class="nav-item">
                 <a class="nav-link" href="charts.html">
-                    <i class="fas fa-fw fa-chart-area"></i>
-                    <span>Charts</span></a>
+                    <i class="fas fa-fw fa-pen"></i>
+                    <span>การทดสอบ</span></a>
+            </li>
+
+            <!-- Nav Item -  Report -->
+            <li class="nav-item">
+            <a class="nav-link" href="charts.html">
+                <i class="fas fa-fw fa-database"></i>
+                <span>รายงาน</span></a>
             </li>
 
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="tables.html">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Tables</span></a>
+                <a class="nav-link" href="logout.php">
+                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                    
+                    <span>ออกจากระบบ</span></a>
             </li>
 
             <!-- Divider -->
@@ -325,9 +369,9 @@
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">
                                     <?php 
-                                        if(isset($_SESSION['userid'])){
-                                    echo $_SESSION['userid']; 
-                                        }
+                                      
+                                    echo $heis['Name']; 
+                                        
                                     ?>
                                 </span>
                                 <img class="img-profile rounded-circle"
@@ -372,6 +416,7 @@
                     $num = mysqli_fetch_array($page);
 ?>                 
                     <h1 class="h3 mb-4 text-gray-800"><?PHP if($num>0){ echo $num['Title']; } else{echo $num;} ?></h1>
+                    <?php include($num['URL']); ?>
 <!---------------------------END Query Page Content--------------------->
                 </div>
                 <!-- /.container-fluid -->
