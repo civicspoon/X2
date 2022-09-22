@@ -59,9 +59,9 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item">
-                <a class="nav-link" href="index.html">
+                <a class="nav-link" href="XII.php?pid=1">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
+                    <span id="hh">Dashboard</span></a>
             </li>
 
             <!-- Divider -->
@@ -130,7 +130,7 @@
             data-parent='#accordionSidebar'>
             <div class='bg-white py-2 collapse-inner rounded'>
                 <h6 class='collapse-header'>รีวิวภาพ:</h6>
-                <a class='collapse-item' href='utilities-color.html'>เพิ่มภาพ</a>
+                <a class='collapse-item' href='XII.php?pid=2'>เพิ่มภาพ</a>
                 <a class='collapse-item' href='utilities-border.html'>ค้นหา/แก้ใข</a>
                 <a class='collapse-item' href='utilities-border.html'>เพิ่ม/ลบประเภท-ชนิด</a>
             </div>
@@ -149,13 +149,13 @@
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item active">
+            <li class="nav-item ">
                 <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true"
                     aria-controls="collapsePages">
                     <i class="fas fa-fw fa-check-square"></i>
                     <span>การวินิฉัยภาพ</span>
                 </a>
-                <div id="collapsePages" class="collapse show" aria-labelledby="headingPages"
+                <div id="collapsePages" class="collapse " aria-labelledby="headingPages"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">การเก็บชั่วโมง CBT</h6>
@@ -412,7 +412,7 @@
 <?php
                     $con = new DB_CON();
 
-                    $page = $con->sql("SELECT * FROM `page`");
+                    $page = $con->page($_GET['pid']);
                     $num = mysqli_fetch_array($page);
 ?>                 
                     <h1 class="h3 mb-4 text-gray-800"><?PHP if($num>0){ echo $num['Title']; } else{echo $num;} ?></h1>
@@ -478,3 +478,4 @@
 </body>
 
 </html>
+
